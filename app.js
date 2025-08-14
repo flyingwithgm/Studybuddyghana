@@ -21,6 +21,109 @@ import {
     where,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Add to app.js
+import { SmartMatchingAlgorithm } from './matching-algorithm.js';
+
+const matchingAlgorithm = new SmartMatchingAlgorithm();
+
+// Enhanced loadPartnersData function
+async function loadPartnersData() {
+    if (!currentUser) return;
+    
+    try {
+        // Get current user profile
+        const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
+        const currentProfile = userDoc.data();
+        
+        // Get all users for matching
+        const usersQuery = query(collection(db, 'users'), where('uid', '!=', currentUser.uid));
+        const querySnapshot = await getDocs(usersQuery);
+        
+        const allUsers = [];
+        querySnapshot.forEach(doc => allUsers.push(doc.data()));
+        
+        // Run matching algorithm
+        const matches = await matchingAlgorithm.findPartners(currentProfile, allUsers);
+        
+        // Display matches
+        displayMatches(matches);
+        
+    } catch (error) {
+        console.error('❌ Matching error:', error);
+        document.getElementById('partners-list').innerHTML = 
+            '<p class="text-center text-danger">Error loading matches</p>';
+    }
+}
+
+function displayMatches(matches) {
+    let html = '';
+    
+    matches.forEach(match => {
+        html += `
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <div class="profile-circle" style="background: ${match.compatibilityColor}">
+                                ${match.name.charAt(0)}
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h5>${match.name}</h5>
+                            <p class="mb-1">${match.school} • ${match.academicLevel}</p>
+                            <p class="mb-1 text-muted">${match.region}</p>
+                            <small class="text-muted">${match.subjects?.slice(0, 3).join(', ')}</small>
+                        </div>
+                        <div class="col-auto text-center">
+                            <div class="compatibility-score">
+                                <div class="progress-ring" style="color: ${match.compatibilityColor}">
+                                    ${match.compatibilityScore}%
+                                </div>
+                                <small>${matchingAlgorithm.generateMatchMessage(match.compatibilityScore)}</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <i class="fas fa-check-circle"></i> ${match.matchReasons.join(' • ')}
+                        </small>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-primary btn-sm" onclick="sendConnectionRequest('${match.uid}')">
+                            <i class="fas fa-user-plus"></i> Connect
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm ms-2" onclick="viewProfile('${match.uid}')">
+                            <i class="fas fa-eye"></i> Profile
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    document.getElementById('partners-list').innerHTML = html || 
+        '<p class="text-center">No matches found. Try adjusting your preferences!</p>';
+}
+
+// Add connection request function
+async function sendConnectionRequest(targetUserId) {
+    if (!currentUser) return;
+    
+    try {
+        await addDoc(collection(db, 'connectionRequests'), {
+            fromUserId: currentUser.uid,
+            toUserId: targetUserId,
+            status: 'pending',
+            timestamp: serverTimestamp()
+        });
+        
+        showAlert('Connection request sent!', 'success');
+    } catch (error) {
+        showAlert('Failed to send request', 'danger');
+    }
+}
 
 // Firebase Configuration
 const firebaseConfig = {
