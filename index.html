@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyBuddy Ghana</title>
+    
+    <!-- PWA -->
+    <meta name="theme-color" content="#ffd700">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Offline Banner -->
+    <div id="offline-banner" class="offline-banner">
+        <i class="fas fa-wifi-slash"></i> You're offline
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap"></i> StudyBuddy Ghana
+            </a>
+            <button class="btn btn-outline-light d-none" id="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid mt-5 pt-3">
+        <!-- Auth Section -->
+        <div id="auth-section">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="text-center mb-3">Welcome</h3>
+                            
+                            <!-- Login Form -->
+                            <form id="login-form" onsubmit="handleLogin(event)">
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Email" id="login-email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" placeholder="Password" id="login-password" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100 mb-2">Login</button>
+                            </form>
+                            
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="handleGoogleSignIn()">
+                                <i class="fab fa-google"></i> Sign in with Google
+                            </button>
+                            
+                            <p class="text-center">
+                                <a href="#" onclick="showRegister()">Create account</a>
+                            </p>
+                            
+                            <!-- Register Form (Hidden Initially) -->
+                            <form id="register-form" style="display:none;" onsubmit="handleRegister(event)">
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Full Name" id="reg-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <select class="form-select" id="reg-school" required>
+                                        <option value="">Select School</option>
+                                        <option>Achimota School</option>
+                                        <option>Wesley Girls</option>
+                                        <option>Mfantsipim</option>
+                                        <option>PRESEC</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <select class="form-select" id="reg-level" required>
+                                        <option value="">Select Level</option>
+                                        <option>SHS 1</option>
+                                        <option>SHS 2</option>
+                                        <option>SHS 3 (WASSCE)</option>
+                                        <option>JHS 3 (BECE)</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Email" id="reg-email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" placeholder="Password" id="reg-password" required minlength="6">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100 mb-2">Register</button>
+                                <p class="text-center">
+                                    <a href="#" onclick="showLogin()">Back to login</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboard-section" style="display:none;">
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Welcome, <span id="user-name">Student</span>!</h2>
+                    <p>Let's find you the perfect study partner</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-users fa-2x text-primary"></i>
+                            <h4 id="groups-count">0</h4>
+                            <p>Study Groups</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-clock fa-2x text-success"></i>
+                            <h4 id="hours-count">0</h4>
+                            <p>Study Hours</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-fire fa-2x text-warning"></i>
+                            <h4 id="streak-count">0</h4>
+                            <p>Day Streak</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <i class="fas fa-award fa-2x text-info"></i>
+                            <h4 id="achievements-count">0</h4>
+                            <p>Achievements</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <button class="btn btn-primary w-100 mb-2" onclick="showSection('find-partners')">
+                        <i class="fas fa-search"></i> Find Study Partners
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-success w-100 mb-2" onclick="createStudyGroup()">
+                        <i class="fas fa-plus"></i> Create Study Group
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Find Partners Section -->
+        <div id="find-partners-section" style="display:none;">
+            <h2>Find Study Partners</h2>
+            <div id="partners-list">
+                <div class="text-center">
+                    <i class="fas fa-users fa-3x text-muted"></i>
+                    <p>Loading partners...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Groups Section -->
+        <div id="study-groups-section" style="display:none;">
+            <h2>Study Groups</h2>
+            <div id="groups-list">
+                <div class="text-center">
+                    <i class="fas fa-book fa-3x text-muted"></i>
+                    <p>Loading groups...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999;">
+        <div class="d-flex justify-content-center align-items-center h-100">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
