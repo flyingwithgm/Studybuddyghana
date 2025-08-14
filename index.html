@@ -3,54 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyBuddy Ghana - Fixed Registration</title>
+    <title>StudyBuddy Ghana - Complete 20-Feature Platform</title>
     
-    <!-- PWA -->
+    <!-- PWA & SEO -->
     <meta name="theme-color" content="#ffd700">
+    <meta name="description" content="Complete study platform for Ghanaian students - WASSCE, BECE prep with 20+ features">
+    <meta name="keywords" content="WASSCE, BECE, Ghana study, partner matching, exam prep">
+    
+    <!-- Icons -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192x192.png">
     
-    <!-- Bootstrap & Icons -->
+    <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ghana-red: #ce1126;
+            --ghana-gold: #ffd700;
+            --ghana-green: #006b3c;
+            --primary-color: #1e3c72;
+            --secondary-color: #ffd700;
+            --success-color: #006b3c;
+            --warning-color: #ffd700;
+            --danger-color: #ce1126;
+            --light-bg: #f8f9fa;
+            --border-radius: 12px;
+            --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            padding-top: 60px;
+            margin: 0;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), #2a5298) !important;
+            box-shadow: var(--box-shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .offline-banner {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: var(--ghana-gold);
+            color: #000;
+            padding: 8px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+
+        .card {
+            border: none;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .section {
+            display: none;
+            padding: 20px;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        .progress-ring {
+            position: relative;
+            width: 60px;
+            height: 60px;
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255,255,255,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .achievement-badge {
+            background: var(--ghana-gold);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .notification-bell {
+            position: relative;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--ghana-red);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-bubble {
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin: 5px 0;
+            max-width: 70%;
+        }
+
+        .chat-bubble.received {
+            background: var(--light-bg);
+            color: #333;
+            align-self: flex-start;
+        }
+
+        .chat-bubble.sent {
+            background: var(--primary-color);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .offline-indicator {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+        }
+
+        .resource-card {
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .voice-message {
+            background: var(--ghana-green);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .exam-countdown {
+            background: linear-gradient(135deg, var(--ghana-red), var(--ghana-gold));
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .tutor-card {
+            border-left: 4px solid var(--ghana-green);
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .mental-health-banner {
+            background: linear-gradient(135deg, #6f42c1, #e83e8c);
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+        }
+
+        .parent-dashboard {
+            background: #f0f8ff;
+            border: 1px solid #007bff;
+            border-radius: var(--border-radius);
+            padding: 20px;
+        }
+
+        .ai-assistant {
+            background: linear-gradient(135deg, #6610f2, #6f42c1);
+            color: white;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+        }
+
+        .qr-code {
+            background: white;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+
+        .dark-mode .card {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 50px;
+            }
+            
+            .card {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Offline Banner -->
     <div id="offline-banner" class="offline-banner">
-        <i class="fas fa-wifi-slash"></i> You're offline
+        <i class="fas fa-wifi-slash"></i> You're offline - some features may be limited
     </div>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-graduation-cap"></i> StudyBuddy Ghana
             </a>
-            <button class="btn btn-outline-light d-none" id="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> Logout
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('dashboard')">
+                            <i class="fas fa-home"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('find-partners')">
+                            <i class="fas fa-users"></i> Find Partners
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('study-groups')">
+                            <i class="fas fa-book"></i> Study Groups
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('resources')">
+                            <i class="fas fa-folder"></i> Resources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('chat')">
+                            <i class="fas fa-comments"></i> Chat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showSection('profile')">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item d-none" id="logout-item">
+                        <a class="nav-link" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-overlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
     <!-- Main Content -->
-    <div class="container-fluid mt-5 pt-3">
+    <div class="container-fluid mt-4">
         <!-- Auth Section -->
-        <div id="auth-section">
+        <div id="auth-section" class="section">
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="text-center mb-3">Welcome to StudyBuddy Ghana</h3>
+                            <h3 class="text-center mb-4">StudyBuddy Ghana</h3>
                             
                             <!-- Login Form -->
-                            <form id="login-form" onsubmit="handleLogin(event)">
+                            <form id="login-form" onsubmit="handleLogin(event)" style="display:block;">
                                 <div class="mb-3">
-                                    <label class="form-label">Email</label>
+                                    <label>Email</label>
                                     <input type="email" class="form-control" id="login-email" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label>Password</label>
                                     <input type="password" class="form-control" id="login-password" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 mb-2">
@@ -58,22 +346,14 @@
                                 </button>
                             </form>
                             
-                            <button class="btn btn-outline-primary w-100 mb-2" onclick="handleGoogleSignIn()">
-                                <i class="fab fa-google"></i> Sign in with Google
-                            </button>
-                            
-                            <p class="text-center">
-                                <a href="#" onclick="showRegister()">Create account</a>
-                            </p>
-                            
-                            <!-- Register Form (Hidden Initially) -->
-                            <form id="register-form" style="display:none;" onsubmit="handleRegister(event)">
+                            <!-- Register Form -->
+                            <form id="register-form" onsubmit="handleRegister(event)" style="display:none;">
                                 <div class="mb-3">
-                                    <label class="form-label">Full Name</label>
+                                    <label>Full Name</label>
                                     <input type="text" class="form-control" id="reg-name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">School</label>
+                                    <label>School</label>
                                     <select class="form-select" id="reg-school" required>
                                         <option value="">Select School</option>
                                         <option>Achimota School</option>
@@ -84,7 +364,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Academic Level</label>
+                                    <label>Academic Level</label>
                                     <select class="form-select" id="reg-level" required>
                                         <option value="">Select Level</option>
                                         <option>SHS 1</option>
@@ -94,7 +374,7 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Region</label>
+                                    <label>Region</label>
                                     <select class="form-select" id="reg-region" required>
                                         <option value="">Select Region</option>
                                         <option>Greater Accra</option>
@@ -107,182 +387,634 @@
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Email</label>
+                                    <label>Email</label>
                                     <input type="email" class="form-control" id="reg-email" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label class="form-label">Password</label>
+                                    <label>Password</label>
                                     <input type="password" class="form-control" id="reg-password" required minlength="6">
                                 </div>
                                 <button type="submit" class="btn btn-success w-100 mb-2">
                                     <i class="fas fa-user-plus"></i> Register
                                 </button>
-                                <p class="text-center">
-                                    <a href="#" onclick="showLogin()">Back to login</a>
-                                </p>
+                            </form>
+                            
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="handleGoogleSignIn()">
+                                <i class="fab fa-google"></i> Continue with Google
+                            </button>
+                            
+                            <p class="text-center">
+                                <a href="#" onclick="showLogin()">Back to login</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section - Feature 1 -->
+        <div id="dashboard-section" class="section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <h2>Welcome, <span id="user-name">Student</span>!</h2>
+                    <p class="text-muted">Your complete study companion</p>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fas fa-users text-primary fa-2x"></i>
+                        <h4 id="groups-count">0</h4>
+                        <p>Study Groups</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fas fa-clock text-success fa-2x"></i>
+                        <h4 id="hours-count">0</h4>
+                        <p>Study Hours</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fas fa-fire text-warning fa-2x"></i>
+                        <h4 id="streak-count">0</h4>
+                        <p>Day Streak</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-card">
+                        <i class="fas fa-award text-info fa-2x"></i>
+                        <h4 id="achievements-count">0</h4>
+                        <p>Achievements</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <button class="btn btn-primary w-100 mb-2" onclick="showSection('find-partners')">
+                        <i class="fas fa-search"></i> Find Partners
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-success w-100 mb-2" onclick="showSection('study-groups')">
+                        <i class="fas fa-plus"></i> Create Group
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-info w-100 mb-2" onclick="showSection('exam-prep')">
+                        <i class="fas fa-calendar"></i> Exam Prep
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feature Cards -->
+            <div class="row">
+                <!-- Feature 4: Smart Matching Preview -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-brain"></i> Smart Matching</h5>
+                            <p>AI-powered partner matching based on subjects, location & compatibility</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 5: Study Scheduler -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-calendar-alt"></i> Study Scheduler</h5>
+                            <p>Ghana-specific scheduling with WASSCE calendar & power outage planning</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Feature 6: Real-time Chat -->
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-comments"></i> Real-time Chat</h5>
+                            <p>Voice messages, Twi language support, offline message queue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Find Partners Section - Feature 4 -->
+        <div id="find-partners-section" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Smart Partner Matching</h2>
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count" id="notification-count" style="display:none;">0</span>
+                </div>
+            </div>
+
+            <!-- Matching Filters -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="fas fa-filter"></i> Smart Filters</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Subject Focus</label>
+                            <select class="form-select" id="filter-subject" onchange="applyFilters()">
+                                <option value="">All Subjects</option>
+                                <option>Mathematics</option>
+                                <option>English</option>
+                                <option>Science</option>
+                                <option>Social Studies</option>
+                                <option>Physics</option>
+                                <option>Chemistry</option>
+                                <option>Biology</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Max Distance</label>
+                            <select class="form-select" id="filter-distance" onchange="applyFilters()">
+                                <option value="25">25km</option>
+                                <option value="50">50km</option>
+                                <option value="100">100km</option>
+                                <option value="200">200km</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Min Compatibility</label>
+                            <select class="form-select" id="filter-compatibility" onchange="applyFilters()">
+                                <option value="60">60%</option>
+                                <option value="70">70%</option>
+                                <option value="80">80%</option>
+                                <option value="90">90%</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Learning Style</label>
+                            <select class="form-select" id="filter-style" onchange="applyFilters()">
+                                <option value="">Any Style</option>
+                                <option>Visual Learner</option>
+                                <option>Auditory Learner</option>
+                                <option>Kinesthetic Learner</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matching Results -->
+            <div id="partners-list">
+                <div class="text-center">
+                    <i class="fas fa-users fa-3x text-muted"></i>
+                    <p>Loading your perfect matches...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Study Groups Section - Feature 5 -->
+        <div id="study-groups-section" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-users"></i> Study Groups</h2>
+                <button class="btn btn-success" onclick="showCreateGroupModal()">
+                    <i class="fas fa-plus"></i> Create Group
+                </button>
+            </div>
+
+            <!-- Group Creation Modal -->
+            <div class="modal fade" id="createGroupModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Create Study Group</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-group-form" onsubmit="handleCreateGroup(event)">
+                                <div class="mb-3">
+                                    <label>Group Name</label>
+                                    <input type="text" class="form-control" id="group-name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Subject</label>
+                                    <select class="form-select" id="group-subject" required>
+                                        <option value="">Select Subject</option>
+                                        <option>Mathematics</option>
+                                        <option>English</option>
+                                        <option>Science</option>
+                                        <option>Social Studies</option>
+                                        <option>Physics</option>
+                                        <option>Chemistry</option>
+                                        <option>Biology</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Max Members</label>
+                                    <select class="form-select" id="group-max-members">
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Meeting Schedule</label>
+                                    <select class="form-select" id="group-schedule">
+                                        <option>Weekends only</option>
+                                        <option>Weekdays only</option>
+                                        <option>Flexible</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    Create Group
+                                </button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- My Groups -->
+            <div id="my-groups">
+                <div class="text-center">
+                    <i class="fas fa-book fa-3x text-muted"></i>
+                    <p>Loading your groups...</p>
+                </div>
+            </div>
         </div>
 
-        <!-- Dashboard Section -->
-        <div id="dashboard-section" style="display:none;">
-            <div class="row">
-                <div class="col-md-12">
-                    <h2>Welcome, <span id="user-name">Student</span>!</h2>
-                    <p>Let's find you the perfect study partner</p>
+        <!-- Resources Section - Feature 7 -->
+        <div id="resources-section" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-folder"></i> Resource Marketplace</h2>
+                <button class="btn btn-primary" onclick="showUploadModal()">
+                    <i class="fas fa-upload"></i> Upload Resource
+                </button>
+            </div>
+
+            <!-- Resource Upload Modal -->
+            <div class="modal fade" id="uploadModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Upload Study Resource</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="upload-form" onsubmit="handleResourceUpload(event)">
+                                <div class="mb-3">
+                                    <label>Resource Title</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Type</label>
+                                    <select class="form-select">
+                                        <option>Past Paper</option>
+                                        <option>Notes</option>
+                                        <option>Textbook</option>
+                                        <option>Video</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label>File Upload</label>
+                                    <input type="file" class="form-control" accept=".pdf,.doc,.mp4">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Upload</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Resources List -->
+            <div id="resources-list">
+                <div class="text-center">
+                    <i class="fas fa-folder-open fa-3x text-muted"></i>
+                    <p>Loading resources...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Section - Feature 6 -->
+        <div id="chat-section" class="section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="fas fa-comments"></i> Smart Chat</h2>
+                <button class="btn btn-outline-primary" onclick="startVoiceMessage()">
+                    <i class="fas fa-microphone"></i> Voice Message
+                </button>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="card">
+                <div class="card-body">
+                    <div id="chat-messages" style="height: 400px; overflow-y: auto;">
+                        <div class="text-center">
+                            <i class="fas fa-comments fa-3x text-muted"></i>
+                            <p>Select a chat to start messaging</p>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <form onsubmit="handleSendMessage(event)">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="message-input" placeholder="Type your message...">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section - Feature 18 -->
+        <div id="profile-section" class="section">
+            <h2><i class="fas fa-user"></i> My Profile</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 id="profile-name">Loading...</h4>
+                            <p id="profile-school">Loading...</p>
+                            
+                            <!-- Achievement Badges -->
+                            <div class="mb-4">
+                                <h5>Achievements</h5>
+                                <div id="achievement-badges">
+                                    <span class="achievement-badge">Study Streak 🔥</span>
+                                    <span class="achievement-badge">Top Student ⭐</span>
+                                    <span class="achievement-badge">Helper 🤝</span>
+                                </div>
+                            </div>
+
+                            <!-- Progress Tracking -->
+                            <div class="mb-4">
+                                <h5>Progress Tracking</h5>
+                                <div class="mb-2">
+                                    <label>Study Hours</label>
+                                    <div class="progress">
+                                        <div class="progress-bar" id="progress-hours" style="width: 0%">0/100</div>
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <label>Groups Joined</label>
+                                    <div class="progress">
+                                        <div class="progress-bar" id="progress-groups" style="width: 0%">0/10</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Settings -->
+                            <div class="mb-4">
+                                <h5>Settings</h5>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="notifications" checked>
+                                    <label class="form-check-label">Enable Notifications</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="dark-mode">
+                                    <label class="form-check-label">Dark Mode</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <img src="https://via.placeholder.com/150" class="rounded-circle mb-3" alt="Profile">
+                            <h5>Profile Picture</h5>
+                            <button class="btn btn-outline-primary">Change Photo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Feature Sections -->
+
+        <!-- Feature 8: Exam Prep -->
+        <div id="exam-prep-section" class="section">
+            <h2><i class="fas fa-calendar"></i> Exam Preparation</h2>
+            
+            <!-- Exam Countdown -->
+            <div class="exam-countdown">
+                <h3>WASSCE 2025 Countdown</h3>
+                <div class="row">
+                    <div class="col">
+                        <h2 id="exam-days">365</h2>
+                        <p>Days</p>
+                    </div>
+                    <div class="col">
+                        <h2 id="exam-hours">8760</h2>
+                        <p>Hours</p>
+                    </div>
+                    <div class="col">
+                        <h2 id="exam-minutes">525600</h2>
+                        <p>Minutes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Study Plan -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Personalized Study Plan</h5>
+                </div>
+                <div class="card-body">
+                    <div id="study-plan">
+                        <p>Loading your personalized study plan...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mock Exams -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Mock Exams</h5>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary mb-2" onclick="startMockExam('mathematics')">
+                        <i class="fas fa-calculator"></i> Mathematics Mock
+                    </button>
+                    <button class="btn btn-primary mb-2" onclick="startMockExam('english')">
+                        <i class="fas fa-book"></i> English Mock
+                    </button>
+                    <button class="btn btn-primary mb-2" onclick="startMockExam('science')">
+                        <i class="fas fa-flask"></i> Science Mock
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 9: Virtual Study Rooms -->
+        <div id="virtual-rooms-section" class="section" style="display:none;">
+            <h2><i class="fas fa-video"></i> Virtual Study Rooms</h2>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>2G-Optimized Video Call</h5>
+                            <div id="video-container" class="bg-dark text-white" style="height: 300px; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-video fa-3x"></i>
+                                <p>Video call optimized for Ghana networks</p>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="joinVideoCall()">
+                                    <i class="fas fa-video"></i> Join Call
+                                </button>
+                                <button class="btn btn-danger" onclick="leaveVideoCall()">
+                                    <i class="fas fa-phone-slash"></i> Leave Call
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Participants</h5>
+                            <div id="participants-list">
+                                <p>No participants yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature 10: Mental Health Support -->
+        <div id="mental-health-section" class="section" style="display:none;">
+            <div class="mental-health-banner">
+                <h2><i class="fas fa-heart"></i> Mental Health Support</h2>
+                <p>Your academic journey matters, and so does your mental well-being</p>
             </div>
             
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-users fa-2x text-primary"></i>
-                            <h4 id="groups-count">0</h4>
-                            <p>Study Groups</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-clock fa-2x text-success"></i>
-                            <h4 id="hours-count">0</h4>
-                            <p>Study Hours</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-fire fa-2x text-warning"></i>
-                            <h4 id="streak-count">0</h4>
-                            <p>Day Streak</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <i class="fas fa-award fa-2x text-info"></i>
-                            <h4 id="achievements-count">0</h4>
-                            <p>Achievements</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-4">
                 <div class="col-md-6">
-                    <button class="btn btn-primary w-100 mb-2" onclick="showSection('find-partners')">
-                        <i class="fas fa-search"></i> Find Study Partners
-                    </button>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-phone"></i> 24/7 Support Line</h5>
+                            <p>Call: 0800-STUDENT (Ghana)</p>
+                            <p>WhatsApp: +233-245-678-901</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
-                    <button class="btn btn-success w-100 mb-2" onclick="createStudyGroup()">
-                        <i class="fas fa-plus"></i> Create Study Group
-                    </button>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5><i class="fas fa-comments"></i> Peer Support Groups</h5>
+                            <p>Join our mental health study groups</p>
+                            <button class="btn btn-primary">Join Group</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Find Partners Section -->
-        <div id="find-partners-section" style="display:none;">
-            <h2>Find Study Partners</h2>
-            <div id="partners-list">
-                <div class="text-center">
-                    <i class="fas fa-users fa-3x text-muted"></i>
-                    <p>Loading partners...</p>
+        <!-- Feature 11: Parent Dashboard -->
+        <div id="parent-dashboard-section" class="section" style="display:none;">
+            <div class="parent-dashboard">
+                <h2><i class="fas fa-users"></i> Parent Dashboard</h2>
+                <p>Monitor your child's academic progress</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Child's Progress</h5>
+                                <div id="child-progress">
+                                    <p>Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Weekly Reports</h5>
+                                <button class="btn btn-primary">View Report</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-<!-- Add to find-partners-section -->
-<div id="find-partners-section" style="display:none;">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Smart Partner Matching</h2>
-        <div class="btn-group" role="group">
-            <button class="btn btn-outline-primary" onclick="filterBySubject('all')">All Subjects</button>
-            <button class="btn btn-outline-primary" onclick="filterByDistance(25)">Within 25km</button>
-        </div>
-    </div>
-    
-    <!-- Matching Filters -->
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5>Filter Your Matches</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3">
-                    <label>Subject Focus</label>
-                    <select class="form-select" id="filter-subject">
-                        <option value="">All Subjects</option>
-                        <option>Mathematics</option>
-                        <option>English</option>
-                        <option>Science</option>
-                        <option>Social Studies</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Max Distance</label>
-                    <select class="form-select" id="filter-distance">
-                        <option value="25">25km</option>
-                        <option value="50">50km</option>
-                        <option value="100">100km</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label>Min Compatibility</label>
-                    <select class="form-select" id="filter-compatibility">
-                        <option value="60">60%</option>
-                        <option value="70">70%</option>
-                        <option value="80">80%</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <button class="btn btn-primary w-100" onclick="applyFilters()">
-                        <i class="fas fa-filter"></i> Apply
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Match Display -->
-    <div id="partners-list">
-        <div class="text-center">
-            <i class="fas fa-users fa-3x text-muted"></i>
-            <p>Loading your perfect matches...</p>
-        </div>
-    </div>
-</div>
 
-        <!-- Study Groups Section -->
-        <div id="study-groups-section" style="display:none;">
-            <h2>Study Groups</h2>
-            <div id="groups-list">
-                <div class="text-center">
-                    <i class="fas fa-book fa-3x text-muted"></i>
-                    <p>Loading groups...</p>
+        <!-- Feature 12: AI Study Assistant -->
+        <div id="ai-assistant-section" class="section" style="display:none;">
+            <div class="ai-assistant">
+                <h2><i class="fas fa-robot"></i> AI Study Assistant</h2>
+                <p>Get personalized study help powered by AI</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="ai-question" placeholder="Ask me anything...">
+                        <button class="btn btn-primary" onclick="askAI()">
+                            <i class="fas fa-robot"></i> Ask AI
+                        </button>
+                    </div>
+                    <div id="ai-response">
+                        <p>AI responses will appear here...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Features 13-20 Quick Access -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Quick Access to All 20 Features</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary w-100 mb-2" onclick="showSection('resources')">
+                                    📚 Resource Marketplace
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-success w-100 mb-2" onclick="showSection('exam-prep')">
+                                    🎯 Exam Prep
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-info w-100 mb-2" onclick="showSection('virtual-rooms')">
+                                    📹 Virtual Study Rooms
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-warning w-100 mb-2" onclick="showSection('tutor-marketplace')">
+                                    👨‍🏫 Tutor Marketplace
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-danger w-100 mb-2" onclick="showSection('mental-health')">
+                                    ❤️ Mental Health Support
+                                </button>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-dark w-100 mb-2" onclick="showSection('parent-dashboard')">
+                                    👨‍👩‍👧‍👦 Parent Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Loading Spinner -->
-    <div id="loading-spinner" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999;">
-        <div class="d-flex justify-content-center align-items-center h-100">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- App Scripts -->
     <script type="module" src="app.js"></script>
 </body>
 </html>
