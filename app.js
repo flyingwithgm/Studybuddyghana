@@ -1,3 +1,4 @@
+// Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { 
     getAuth, 
@@ -12,17 +13,24 @@ import {
     getFirestore, 
     collection, 
     doc, 
-    addDoc, 
-    getDoc, 
-    getDocs, 
-    updateDoc, 
     setDoc,
-    query, 
-    where, 
+    addDoc,
+    getDoc,
+    getDocs,
+    query,
+    where,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-import firebaseConfig from './firebase-config.js';
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyC2Kl8otpakwNYDAM88YlTJ71OnM_Qb-Sk",
+    authDomain: "studybuddyghana.firebaseapp.com",
+    projectId: "studybuddyghana",
+    storageBucket: "studybuddyghana.firebasestorage.app",
+    messagingSenderId: "775379484331",
+    appId: "1:775379484331:web:65443b3d223772e220c1ee"
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -33,60 +41,70 @@ const db = getFirestore(app);
 let currentUser = null;
 
 // Initialize app
-document.addEventListener('DOMContentLoaded', initApp);
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 StudyBuddy Ghana initialized');
+    setupAuthListener();
+    setupOfflineDetection();
+});
 
-function initApp() {
-    // Setup auth listener
-    onAuthStateChanged(auth, handleAuthStateChange);
-    
-    // Setup offline detection
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    // Initial state
-    showSection('auth');
-}
-
-// Auth State Handler
-function handleAuthStateChange(user) {
-    if (user) {
-        currentUser = user;
-        loadUserData(user.uid);
-        showSection('dashboard');
-        document.getElementById('logout-btn').classList.remove('d-none');
-    } else {
-        currentUser = null;
-        showSection('auth');
-        document.getElementById('logout-btn').classList.add('d-none');
-    }
+// Auth State Listener
+function setupAuthListener() {
+    onAuthStateChanged(auth, async (user) => {
+        console.log('🔐 Auth state:', user ? 'Logged in' : 'Logged out');
+        
+        if (user) {
+            currentUser = user;
+            await loadUserData(user.uid);
+            showSection('dashboard');
+            document.getElementById('logout-btn').classList.remove('d-none');
+        } else {
+            currentUser = null;
+            showSection('auth');
+            showLogin();
+            document.getElementById('logout-btn').classList.add('d-none');
+        }
+    });
 }
 
 // Section Management
 function showSection(section) {
+    console.log('📍 Showing section:', section);
+    
     const sections = ['auth-section', 'dashboard-section', 'find-partners-section', 'study-groups-section'];
     sections.forEach(s => {
         const element = document.getElementById(s);
         if (element) element.style.display = 'none';
     });
     
-    document.getElementById(`${section}-section`).style.display = 'block';
-    
-    if (section === 'dashboard') loadDashboardData();
-    if (section === 'find-partners') loadPartnersData();
-    if (section === 'study-groups') loadGroupsData();
+    const targetSection = document.getElementById(`${section}-section`);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        
+        if (section === 'dashboard') loadDashboardData();
+        if (section === 'find-partners') loadPartnersData();
+        if (section === 'study-groups') loadGroupsData();
+    }
 }
 
 // Auth Functions
 async function handleLogin(event) {
     event.preventDefault();
+    console.log('🎯 Login attempt');
+    
     const email = document.getElementById('login-email').value;
     const password = document.getElementById('login-password').value;
+
+    if (!email || !password) {
+        showAlert('Please enter email and password', 'warning');
+        return;
+    }
 
     showLoading(true);
     try {
         await signInWithEmailAndPassword(auth, email, password);
         showAlert('🎉 Welcome back!', 'success');
     } catch (error) {
+        console.error('❌ Login error:', error);
         showAlert(error.message, 'danger');
     }
     showLoading(false);
@@ -94,6 +112,8 @@ async function handleLogin(event) {
 
 async function handleRegister(event) {
     event.preventDefault();
+    console.log('🎯 Registration attempt');
+    
     const userData = {
         name: document.getElementById('reg-name').value,
         school: document.getElementById('reg-school').value,
@@ -103,52 +123,86 @@ async function handleRegister(event) {
         password: document.getElementById('reg-password').value
     };
 
+    // Validation
+    if (!Object.values(userData).every(v => v)) {
+        showAlert('Please fill in all fields', 'warning');
+        return;
+    }
+
+    if (userData.password.length < 6) {
+        showAlert('Password must be at least 6 characters', 'warning');
+        return;
+    }
+
+    console.log('✅ Validation passed:', userData);
+
     showLoading(true);
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+        console.log('✅ User created:', userCredential.user.uid);
+        
         await createUserProfile(userCredential.user.uid, userData);
-        showAlert('🎉 Account created!', 'success');
+        console.log('✅ Profile created');
+        
+        showAlert('🎉 Account created successfully!', 'success');
         showLogin();
+        
     } catch (error) {
+        console.error('❌ Registration error:', error.code, error.message);
         showAlert(error.message, 'danger');
     }
     showLoading(false);
 }
 
-async function handleGoogleSignIn() {
-    const provider = new GoogleAuthProvider();
-    try {
-        await signInWithPopup(auth, provider);
-    } catch (error) {
-        showAlert(error.message, 'danger');
-    }
-}
-
 async function createUserProfile(uid, userData) {
     const profile = {
+        uid: uid,
         name: userData.name,
         school: userData.school,
         academicLevel: userData.academicLevel,
         region: userData.region,
         email: userData.email,
         subjects: [],
+        subjectStrengths: {},
+        studyPreferences: {
+            groupSize: "2-4_people",
+            sessionLength: "2-3_hours",
+            preferredTime: ["weekends"],
+            studyStyle: ["visual_learner"]
+        },
         stats: {
             studyHoursLogged: 0,
             groupsJoined: 0,
             peersHelped: 0,
+            averageSessionRating: 0,
             streakDays: 0
         },
-        createdAt: serverTimestamp()
+        preferences: {
+            notifications: true,
+            visibility: "public",
+            matchingRadius: 25,
+            languagePreference: ["English", "Twi"]
+        },
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
     };
+
     await setDoc(doc(db, 'users', uid), profile);
 }
 
-async function logout() {
-    await signOut(auth);
-    showAlert('Logged out successfully', 'info');
+async function handleGoogleSignIn() {
+    console.log('🎯 Google sign-in attempt');
+    const provider = new GoogleAuthProvider();
+    
+    try {
+        await signInWithPopup(auth, provider);
+        showAlert('🎉 Google login successful!', 'success');
+    } catch (error) {
+        console.error('❌ Google login error:', error);
+        showAlert(error.message, 'danger');
+    }
 }
 
-// Data Loading Functions
 async function loadUserData(uid) {
     const userDoc = await getDoc(doc(db, 'users', uid));
     if (userDoc.exists()) {
@@ -182,10 +236,9 @@ async function loadPartnersData() {
             <div class="card mb-3">
                 <div class="card-body">
                     <h5>${partner.name}</h5>
-                    <p class="text-muted">${partner.school} • ${partner.academicLevel}</p>
-                    <button class="btn btn-primary btn-sm" onclick="connectPartner('${partner.uid}')">
-                        Connect
-                    </button>
+                    <p>${partner.school} • ${partner.academicLevel}</p>
+                    <p>${partner.region}</p>
+                    <button class="btn btn-primary btn-sm">Connect</button>
                 </div>
             </div>
         `;
@@ -234,7 +287,7 @@ function showRegister() {
 function showAlert(message, type) {
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
-    alertDiv.style.cssText = 'top: 10px; right: 10px; z-index: 9999; min-width: 300px;';
+    alertDiv.style.cssText = 'top: 70px; right: 10px; z-index: 9999; min-width: 300px;';
     alertDiv.innerHTML = `${message}<button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>`;
     
     document.body.appendChild(alertDiv);
@@ -249,11 +302,28 @@ function createStudyGroup() {
     showAlert('Study groups coming soon!', 'info');
 }
 
-function connectPartner(partnerId) {
-    showAlert(`Connection request sent to ${partnerId}`, 'success');
+async function logout() {
+    try {
+        await signOut(auth);
+        showAlert('Logged out successfully', 'info');
+    } catch (error) {
+        showAlert(error.message, 'danger');
+    }
 }
 
-// Export functions to global scope
+// Offline Detection
+function setupOfflineDetection() {
+    window.addEventListener('online', () => {
+        document.getElementById('offline-banner').style.display = 'none';
+        showAlert('Back online!', 'success');
+    });
+    
+    window.addEventListener('offline', () => {
+        document.getElementById('offline-banner').style.display = 'block';
+    });
+}
+
+// Export to global scope
 window.showSection = showSection;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
@@ -261,4 +331,3 @@ window.handleGoogleSignIn = handleGoogleSignIn;
 window.logout = logout;
 window.showLogin = showLogin;
 window.showRegister = showRegister;
-window.createStudyGroup = createStudyGroup;
