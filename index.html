@@ -4,17 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyBuddy Ghana - Complete 20-Feature Platform</title>
-    
-    <!-- PWA & SEO -->
     <meta name="theme-color" content="#ffd700">
     <meta name="description" content="Complete study platform for Ghanaian students - WASSCE, BECE prep with 20+ features">
     <meta name="keywords" content="WASSCE, BECE, Ghana study, partner matching, exam prep">
-    
-    <!-- Icons -->
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/png" href="icon-192x192.png">
-    
-    <!-- Styles -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -32,24 +26,20 @@
             --border-radius: 12px;
             --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--light-bg);
             padding-top: 60px;
             margin: 0;
         }
-
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), #2a5298) !important;
             box-shadow: var(--box-shadow);
         }
-
         .navbar-brand {
             font-weight: 700;
             font-size: 1.5rem;
         }
-
         .offline-banner {
             position: fixed;
             top: 60px;
@@ -62,27 +52,22 @@
             z-index: 1000;
             display: none;
         }
-
         .card {
             border: none;
             box-shadow: var(--box-shadow);
             border-radius: var(--border-radius);
             transition: transform 0.2s;
         }
-
         .card:hover {
             transform: translateY(-2px);
         }
-
         .section {
             display: none;
             padding: 20px;
         }
-
         .section.active {
             display: block;
         }
-
         .stat-card {
             background: white;
             border-radius: var(--border-radius);
@@ -90,19 +75,16 @@
             text-align: center;
             box-shadow: var(--box-shadow);
         }
-
         .progress-ring {
             position: relative;
             width: 60px;
             height: 60px;
         }
-
         .progress-ring circle {
             fill: none;
             stroke-width: 4;
             stroke-linecap: round;
         }
-
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -115,7 +97,6 @@
             justify-content: center;
             z-index: 9999;
         }
-
         .achievement-badge {
             background: var(--ghana-gold);
             color: #000;
@@ -126,11 +107,9 @@
             margin: 2px;
             display: inline-block;
         }
-
         .notification-bell {
             position: relative;
         }
-
         .notification-count {
             position: absolute;
             top: -5px;
@@ -145,7 +124,6 @@
             align-items: center;
             justify-content: center;
         }
-
         .chat-bubble {
             background: var(--primary-color);
             color: white;
@@ -154,19 +132,16 @@
             margin: 5px 0;
             max-width: 70%;
         }
-
         .chat-bubble.received {
             background: var(--light-bg);
             color: #333;
             align-self: flex-start;
         }
-
         .chat-bubble.sent {
             background: var(--primary-color);
             color: white;
             align-self: flex-end;
         }
-
         .offline-indicator {
             background: #f8f9fa;
             padding: 10px;
@@ -174,14 +149,12 @@
             border-radius: var(--border-radius);
             margin: 10px 0;
         }
-
         .resource-card {
             border: 1px solid #dee2e6;
             border-radius: var(--border-radius);
             padding: 15px;
             margin: 10px 0;
         }
-
         .voice-message {
             background: var(--ghana-green);
             color: white;
@@ -189,7 +162,6 @@
             border-radius: 25px;
             cursor: pointer;
         }
-
         .exam-countdown {
             background: linear-gradient(135deg, var(--ghana-red), var(--ghana-gold));
             color: white;
@@ -198,13 +170,11 @@
             text-align: center;
             margin: 20px 0;
         }
-
         .tutor-card {
             border-left: 4px solid var(--ghana-green);
             padding: 15px;
             margin: 10px 0;
         }
-
         .mental-health-banner {
             background: linear-gradient(135deg, #6f42c1, #e83e8c);
             color: white;
@@ -212,14 +182,12 @@
             border-radius: var(--border-radius);
             margin: 20px 0;
         }
-
         .parent-dashboard {
             background: #f0f8ff;
             border: 1px solid #007bff;
             border-radius: var(--border-radius);
             padding: 20px;
         }
-
         .ai-assistant {
             background: linear-gradient(135deg, #6610f2, #6f42c1);
             color: white;
@@ -227,7 +195,6 @@
             border-radius: var(--border-radius);
             margin: 10px 0;
         }
-
         .qr-code {
             background: white;
             padding: 20px;
@@ -235,22 +202,18 @@
             border-radius: var(--border-radius);
             text-align: center;
         }
-
         .dark-mode {
             background-color: #121212;
             color: #ffffff;
         }
-
         .dark-mode .card {
             background-color: #1e1e1e;
             border-color: #333;
         }
-
         @media (max-width: 768px) {
             body {
                 padding-top: 50px;
             }
-            
             .card {
                 margin-bottom: 10px;
             }
@@ -258,13 +221,11 @@
     </style>
 </head>
 <body>
-    <!-- Offline Banner -->
     <div id="offline-banner" class="offline-banner">
         <i class="fas fa-wifi-slash"></i> You're offline - some features may be limited
     </div>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="main-navbar" style="display: none;">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 <i class="fas fa-graduation-cap"></i> StudyBuddy Ghana
@@ -314,24 +275,19 @@
         </div>
     </nav>
 
-    <!-- Loading Spinner -->
     <div id="loading-spinner" class="loading-overlay">
         <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 
-    <!-- Main Content -->
     <div class="container-fluid mt-4">
-        <!-- Auth Section -->
-        <div id="auth-section" class="section">
+        <div id="auth-section" class="section active">
             <div class="row justify-content-center">
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
                             <h3 class="text-center mb-4">StudyBuddy Ghana</h3>
-                            
-                            <!-- Login Form -->
                             <form id="login-form" onsubmit="handleLogin(event)" style="display:block;">
                                 <div class="mb-3">
                                     <label>Email</label>
@@ -345,8 +301,6 @@
                                     <i class="fas fa-sign-in-alt"></i> Login
                                 </button>
                             </form>
-                            
-                            <!-- Register Form -->
                             <form id="register-form" onsubmit="handleRegister(event)" style="display:none;">
                                 <div class="mb-3">
                                     <label>Full Name</label>
@@ -398,11 +352,9 @@
                                     <i class="fas fa-user-plus"></i> Register
                                 </button>
                             </form>
-                            
                             <button class="btn btn-outline-primary w-100 mb-2" onclick="handleGoogleSignIn()">
                                 <i class="fab fa-google"></i> Continue with Google
                             </button>
-                            
                             <p class="text-center">
                                 <a href="#" onclick="showLogin()">Back to login</a>
                             </p>
@@ -412,16 +364,13 @@
             </div>
         </div>
 
-        <!-- Dashboard Section - Feature 1 -->
-        <div id="dashboard-section" class="section">
+        <div id="dashboard-section" class="section" style="display: none;">
             <div class="row mb-4">
                 <div class="col-md-12">
                     <h2>Welcome, <span id="user-name">Student</span>!</h2>
                     <p class="text-muted">Your complete study companion</p>
                 </div>
             </div>
-
-            <!-- Stats Cards -->
             <div class="row mb-4">
                 <div class="col-md-3 col-6">
                     <div class="stat-card">
@@ -452,8 +401,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Quick Actions -->
             <div class="row mb-4">
                 <div class="col-md-4">
                     <button class="btn btn-primary w-100 mb-2" onclick="showSection('find-partners')">
@@ -471,10 +418,7 @@
                     </button>
                 </div>
             </div>
-
-            <!-- Feature Cards -->
             <div class="row">
-                <!-- Feature 4: Smart Matching Preview -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
@@ -483,8 +427,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Feature 5: Study Scheduler -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
@@ -493,8 +435,6 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Feature 6: Real-time Chat -->
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-body">
@@ -506,8 +446,7 @@
             </div>
         </div>
 
-        <!-- Find Partners Section - Feature 4 -->
-        <div id="find-partners-section" class="section">
+        <div id="find-partners-section" class="section" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>Smart Partner Matching</h2>
                 <div class="notification-bell">
@@ -515,8 +454,6 @@
                     <span class="notification-count" id="notification-count" style="display:none;">0</span>
                 </div>
             </div>
-
-            <!-- Matching Filters -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5><i class="fas fa-filter"></i> Smart Filters</h5>
@@ -566,8 +503,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Matching Results -->
             <div id="partners-list">
                 <div class="text-center">
                     <i class="fas fa-users fa-3x text-muted"></i>
@@ -576,16 +511,13 @@
             </div>
         </div>
 
-        <!-- Study Groups Section - Feature 5 -->
-        <div id="study-groups-section" class="section">
+        <div id="study-groups-section" class="section" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><i class="fas fa-users"></i> Study Groups</h2>
                 <button class="btn btn-success" onclick="showCreateGroupModal()">
                     <i class="fas fa-plus"></i> Create Group
                 </button>
             </div>
-
-            <!-- Group Creation Modal -->
             <div class="modal fade" id="createGroupModal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -637,8 +569,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- My Groups -->
             <div id="my-groups">
                 <div class="text-center">
                     <i class="fas fa-book fa-3x text-muted"></i>
@@ -647,16 +577,13 @@
             </div>
         </div>
 
-        <!-- Resources Section - Feature 7 -->
-        <div id="resources-section" class="section">
+        <div id="resources-section" class="section" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><i class="fas fa-folder"></i> Resource Marketplace</h2>
                 <button class="btn btn-primary" onclick="showUploadModal()">
                     <i class="fas fa-upload"></i> Upload Resource
                 </button>
             </div>
-
-            <!-- Resource Upload Modal -->
             <div class="modal fade" id="uploadModal" tabindex="-1">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -689,8 +616,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Resources List -->
             <div id="resources-list">
                 <div class="text-center">
                     <i class="fas fa-folder-open fa-3x text-muted"></i>
@@ -699,16 +624,13 @@
             </div>
         </div>
 
-        <!-- Chat Section - Feature 6 -->
-        <div id="chat-section" class="section">
+        <div id="chat-section" class="section" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2><i class="fas fa-comments"></i> Smart Chat</h2>
                 <button class="btn btn-outline-primary" onclick="startVoiceMessage()">
                     <i class="fas fa-microphone"></i> Voice Message
                 </button>
             </div>
-
-            <!-- Chat Interface -->
             <div class="card">
                 <div class="card-body">
                     <div id="chat-messages" style="height: 400px; overflow-y: auto;">
@@ -731,8 +653,7 @@
             </div>
         </div>
 
-        <!-- Profile Section - Feature 18 -->
-        <div id="profile-section" class="section">
+        <div id="profile-section" class="section" style="display: none;">
             <h2><i class="fas fa-user"></i> My Profile</h2>
             <div class="row">
                 <div class="col-md-8">
@@ -740,8 +661,6 @@
                         <div class="card-body">
                             <h4 id="profile-name">Loading...</h4>
                             <p id="profile-school">Loading...</p>
-                            
-                            <!-- Achievement Badges -->
                             <div class="mb-4">
                                 <h5>Achievements</h5>
                                 <div id="achievement-badges">
@@ -750,8 +669,6 @@
                                     <span class="achievement-badge">Helper 🤝</span>
                                 </div>
                             </div>
-
-                            <!-- Progress Tracking -->
                             <div class="mb-4">
                                 <h5>Progress Tracking</h5>
                                 <div class="mb-2">
@@ -767,8 +684,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Settings -->
                             <div class="mb-4">
                                 <h5>Settings</h5>
                                 <div class="form-check">
@@ -795,13 +710,8 @@
             </div>
         </div>
 
-        <!-- Additional Feature Sections -->
-
-        <!-- Feature 8: Exam Prep -->
-        <div id="exam-prep-section" class="section">
+        <div id="exam-prep-section" class="section" style="display: none;">
             <h2><i class="fas fa-calendar"></i> Exam Preparation</h2>
-            
-            <!-- Exam Countdown -->
             <div class="exam-countdown">
                 <h3>WASSCE 2025 Countdown</h3>
                 <div class="row">
@@ -819,8 +729,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Study Plan -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5>Personalized Study Plan</h5>
@@ -831,8 +739,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Mock Exams -->
             <div class="card mb-4">
                 <div class="card-header">
                     <h5>Mock Exams</h5>
@@ -851,8 +757,7 @@
             </div>
         </div>
 
-        <!-- Feature 9: Virtual Study Rooms -->
-        <div id="virtual-rooms-section" class="section" style="display:none;">
+        <div id="virtual-rooms-section" class="section" style="display: none;">
             <h2><i class="fas fa-video"></i> Virtual Study Rooms</h2>
             <div class="row">
                 <div class="col-md-8">
@@ -887,13 +792,11 @@
             </div>
         </div>
 
-        <!-- Feature 10: Mental Health Support -->
-        <div id="mental-health-section" class="section" style="display:none;">
+        <div id="mental-health-section" class="section" style="display: none;">
             <div class="mental-health-banner">
                 <h2><i class="fas fa-heart"></i> Mental Health Support</h2>
                 <p>Your academic journey matters, and so does your mental well-being</p>
             </div>
-            
             <div class="row">
                 <div class="col-md-6">
                     <div class="card">
@@ -916,12 +819,10 @@
             </div>
         </div>
 
-        <!-- Feature 11: Parent Dashboard -->
-        <div id="parent-dashboard-section" class="section" style="display:none;">
+        <div id="parent-dashboard-section" class="section" style="display: none;">
             <div class="parent-dashboard">
                 <h2><i class="fas fa-users"></i> Parent Dashboard</h2>
                 <p>Monitor your child's academic progress</p>
-                
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
@@ -945,13 +846,11 @@
             </div>
         </div>
 
-        <!-- Feature 12: AI Study Assistant -->
-        <div id="ai-assistant-section" class="section" style="display:none;">
+        <div id="ai-assistant-section" class="section" style="display: none;">
             <div class="ai-assistant">
                 <h2><i class="fas fa-robot"></i> AI Study Assistant</h2>
                 <p>Get personalized study help powered by AI</p>
             </div>
-            
             <div class="card">
                 <div class="card-body">
                     <div class="input-group mb-3">
@@ -967,7 +866,6 @@
             </div>
         </div>
 
-        <!-- Additional Features 13-20 Quick Access -->
         <div class="row mt-4">
             <div class="col-md-12">
                 <div class="card">
@@ -1011,10 +909,61 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- App Scripts -->
     <script type="module" src="app.js"></script>
+    <script>
+        function showLogin() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+
+        function showRegister() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function handleLoginSuccess() {
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('main-navbar').style.display = 'flex';
+            document.getElementById('dashboard-section').style.display = 'block';
+            updateUserStats();
+        }
+
+        function logout() {
+            document.getElementById('auth-section').style.display = 'block';
+            document.getElementById('main-navbar').style.display = 'none';
+            document.querySelectorAll('.section').forEach(section => {
+                if (section.id !== 'auth-section') {
+                    section.style.display = 'none';
+                }
+            });
+            document.getElementById('login-form').reset();
+            showLogin();
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId + '-section').style.display = 'block';
+        }
+
+        function updateUserStats() {
+            document.getElementById('user-name').textContent = 'Kwame';
+            document.getElementById('groups-count').textContent = '3';
+            document.getElementById('hours-count').textContent = '24';
+            document.getElementById('streak-count').textContent = '5';
+            document.getElementById('achievements-count').textContent = '7';
+        }
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleLoginSuccess();
+        });
+
+        document.getElementById('dark-mode').addEventListener('change', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
 </body>
 </html>
