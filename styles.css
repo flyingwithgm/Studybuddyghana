@@ -63,3 +63,39 @@ body {
 .section.active {
     display: block;
 }
+/* Add to styles.css */
+.profile-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 20px;
+}
+
+.compatibility-score {
+    text-align: center;
+}
+
+.progress-ring {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 0 auto 5px;
+}
+
+.match-card {
+    transition: transform 0.2s;
+}
+
+.match-card:hover {
+    transform: translateY(-2px);
+}
